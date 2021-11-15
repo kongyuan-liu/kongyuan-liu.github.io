@@ -7,13 +7,15 @@
   
   <title>指针 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
+  <meta name="description" content="目录前言    细说指针     变量和地址  指针变量和指针类型      变量的指针和指针变量   指针变量的定义   指针变量的使用    “&amp;”和“*”的结合方向    指针运算   赋值运算  指针与整数的加减运算  关系运算    指针与数组   指向数组的指针  指针数组  字符指针  多级指针      指针与函数   函数参数为为指针 函数返回值为指针 指向指针的函数">
+<meta property="og:type" content="article">
 <meta property="og:title" content="指针">
 <meta property="og:url" content="http://example.com/2021/11/11/%E6%8C%87%E9%92%88/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="目录前言    细说指针     变量和地址  指针变量和指针类型      变量的指针和指针变量   指针变量的定义   指针变量的使用    “&amp;”和“*”的结合方向    指针运算   赋值运算  指针与整数的加减运算  关系运算    指针与数组   指向数组的指针  指针数组  字符指针  多级指针      指针与函数   函数参数为为指针 函数返回值为指针 指向指针的函数">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-11-11T08:58:31.000Z">
-<meta property="article:modified_time" content="2021-11-11T08:58:31.855Z">
+<meta property="article:modified_time" content="2021-11-13T07:48:32.120Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -86,11 +88,109 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><p>前言  </p>
+<ol>
+<li><strong>细说指针</strong>  </li>
+</ol>
+<ul>
+<li><p>变量和地址</p>
+</li>
+<li><p>指针变量和指针类型  </p>
+</li>
+</ul>
+<ol start="2">
+<li><strong>变量的指针和指针变量</strong></li>
+</ol>
+<ul>
+<li><p>指针变量的定义 </p>
+</li>
+<li><p>指针变量的使用  </p>
+</li>
+<li><p>“&amp;”和“*”的结合方向</p>
+</li>
+</ul>
+<ol start="3">
+<li><strong>指针运算</strong></li>
+</ol>
+<ul>
+<li><p>赋值运算</p>
+</li>
+<li><p>指针与整数的加减运算</p>
+</li>
+<li><p>关系运算</p>
+</li>
+</ul>
+<ol start="4">
+<li><strong>指针与数组</strong></li>
+</ol>
+<ul>
+<li><p>指向数组的指针</p>
+</li>
+<li><p>指针数组</p>
+</li>
+<li><p>字符指针</p>
+</li>
+<li><p>多级指针  </p>
+</li>
+</ul>
+<ol start="5">
+<li><strong>指针与函数</strong></li>
+</ol>
+<ul>
+<li>函数参数为为指针</li>
+<li>函数返回值为指针</li>
+<li>指向指针的函数  </li>
+</ul>
+<p>结语  </p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>  在学习指针之前，我们先要了解指针的概念，要知道指针的概念，要先了解变量在内存中如何存储的。在存储时，内存被分为一块一块的。每一块都有一个特有的编号。而这个编号可以暂时理解为指针，通俗点讲，就像酒店的门牌号一样。  </p>
+<h2 id="一-细说指针"><a href="#一-细说指针" class="headerlink" title="一. 细说指针"></a>一. 细说指针</h2><ol>
+<li><strong>变量和地址</strong><br>先写一段简单的代码：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">  void main()&#123;  </span><br><span class="line">  int x = 10, int y = 20;  </span><br><span class="line">  &#125;</span><br><span class="line">  ```   </span><br><span class="line">这段代码非常简单，就是两个变量的声明，分别赋值了 10、20。我们把内存当做一个酒店，而每个房间就是一块内存。那么“int x = 10;”和“int y = 20;”的实际含义如下：</span><br><span class="line">去酒店订了两个房间，门牌号暂时用 px、py 表示</span><br><span class="line">让 10 住进 px，让 20 住进 py</span><br><span class="line">其中门牌号就是 px、py 就是变量的地址</span><br><span class="line">x 和 y 在这里可以理解为具体的房间，房间 x 的门牌号（地址）是 px，房间 y 的门牌号（地址）是 py。而 10 和 20，通过 px、py 两个门牌，找到房间，住进 x、y。</span><br><span class="line">2. **指针变量和指针类型**</span><br><span class="line">(1)int* ptr;//指针的类型是int*,指针所指向的类型是int  </span><br><span class="line">(2)char* ptr;//指针的类型是char*,指针所指向的类型是char  </span><br><span class="line">(3)int** ptr;//指针的类型是int**,指针所指向的类型是int*  </span><br><span class="line">(4)int(*ptr)[3];//指针的类型是int(*)[3],指针所指向的类型是int()[3]  </span><br><span class="line">(5)int*(*ptr)[4];//指针的类型是int*(*)[4],指针所指向的类型是int*()[4]   </span><br><span class="line">ps:32位系统默认指针大小为4个字节(8位为一个字节)，因为32位系统默认的内存寻址空间是4G，所以指针大小为4个字节可以完成对4G空间的寻址。2^32约为4个G；64位系统默认指针大小为8个字节，理论上寻址空间可达到1800万个TB，指针大小为8个字节可完成对其的寻址。  </span><br><span class="line">## 二.变量的指针和指针变量  #  </span><br><span class="line">1.**指针变量的定义**  </span><br><span class="line">指针变量的定义形式如：数据类型 *指针名;例如：</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+//分别定义了 int、float、char 类型的指针变量<br>int *x;<br>float *f;<br>char *ch;  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">指针变量名为 x、f、ch。并不是*x、*f、*ch   </span><br><span class="line">2.**指针变量的使用**  </span><br><span class="line">   取地址运算符&amp;：单目运算符&amp;是用来取操作对象的地址。例：&amp;i 为取变量 i 的地址。对于常量表达式、寄存器变量不能取地址（因为它们存储在存储器中，没有地址。  </span><br><span class="line">   指针运算符*（间接寻址符）：与&amp;为逆运算，作用是通过操作对象的地址，获取存储的内容。例：x = &amp;i，x 为 i 的地址，*x 则为通过 i 的地址，获取 i 的内容。 </span><br><span class="line">  </span><br><span class="line">代码示例：   </span><br></pre></td></tr></table></figure>
+//声明了一个普通变量 a<br>int a;<br>//声明一个指针变量，指向变量 a 的地址<br>int *pa;<br>//通过取地址符&amp;，获取 a 的地址，赋值给指针变量<br>pa = &a;<br>//通过间接寻址符，获取指针指向的内容<br>printf(“%d”, *pa);<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">3.**&quot;&amp;&quot;和“*&quot;的结合方向**   </span><br><span class="line">“&amp;”和“*”都是右结合的。假设有变量 x = 10，则*&amp;x 的含义是，先获取变量 x 的地址，再获取地址中的内容。因为“&amp;”和“*”互为逆运算，所以 x = *&amp;x。  </span><br><span class="line"></span><br><span class="line">## 三.指针运算 ##</span><br><span class="line">1. **赋值运算**  </span><br><span class="line"> 指针变量可以互相赋值，也可以赋值某个变量的地址，或者赋值一个具体的地址</span><br></pre></td></tr></table></figure>
+int *px, *py, *pz, x = 10;<br>//赋予某个变量的地址<br>px = &x;<br>//相互赋值<br>py = px;<br>//赋值具体的地址<br>pz = 4000;<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">2. **指针与整数的加减运算**</span><br><span class="line">指针变量的自增自减运算。指针加 1 或减 1 运算，表示指针向前或向后移动一个单元（不同类型的指针，单元长度不同）。这个在数组中非常常用。  </span><br><span class="line">指针变量加上或减去一个整形数。和第一条类似，具体加几就是向前移动几个单元，减几就是向后移动几个单元。</span><br><span class="line">```  </span><br><span class="line">//定义三个变量，假设它们地址为连续的，分别为 4000、4004、4008</span><br><span class="line">int x, y, z;</span><br><span class="line"></span><br><span class="line">//定义一个指针，指向 x</span><br><span class="line">int *px = &amp;x;</span><br><span class="line"></span><br><span class="line">//利用指针变量 px 加减整数，分别输出 x、y、z</span><br><span class="line">printf(&quot;x = %d&quot;, *px);		//因为 px 指向 x，所以*px = x</span><br><span class="line"></span><br><span class="line">//px + 1，表示，向前移动一个单元（从 4000 到 4004）</span><br><span class="line">//这里要先(px + 1)，再*(px + 1)获取内容，因为单目运算符“*”优先级高于双目运算符“+”</span><br><span class="line">printf(&quot;y = %d&quot;, *(px + 1));		</span><br><span class="line">printf(&quot;z = %d&quot;, *(px + 2));</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>3.<strong>关系运算</strong><br>假设有指针变量 px、py。<br>  1）px &gt; py 表示 px 指向的存储地址是否大于 py 指向的地址<br>  2）px == py 表示 px 和 py 是否指向同一个存储单元<br>  3）px == 0 和 px != 0 表示 px 是否为空指针  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">//定义一个数组，数组中相邻元素地址间隔一个单元</span><br><span class="line">int num[2] = &#123;1, 3&#125;;</span><br><span class="line"></span><br><span class="line">//将数组中第一个元素地址和第二个元素的地址赋值给 px、py</span><br><span class="line">int *px = &amp;num[0], *py = &amp;num[1];</span><br><span class="line">int *pz = &amp;num[0];</span><br><span class="line">int *pn;</span><br><span class="line"></span><br><span class="line">//则 py &gt; px</span><br><span class="line">if(py &gt; px)&#123;</span><br><span class="line">	printf(&quot;py 指向的存储地址大于 px 所指向的存储地址&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//pz 和 px 都指向 num[0]</span><br><span class="line">if(pz == px)&#123;</span><br><span class="line">	printf(&quot;px 和 pz 指向同一个地址&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//pn 没有初始化</span><br><span class="line">if(pn == NULL || pn == 0)&#123;</span><br><span class="line">	printf(&quot;pn 是一个空指针&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="四-指针与数组"><a href="#四-指针与数组" class="headerlink" title="四.指针与数组"></a>四.指针与数组</h2><p>1.<strong>指向数组的指针</strong>  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int nums[10], *p;</span><br><span class="line">//数组名即为数组的首地址  </span><br><span class="line">p = nums;  </span><br><span class="line">//数组第一个元素的地址也是数组的首地址  </span><br><span class="line">p = &amp;nums[0];</span><br><span class="line">```  </span><br><span class="line">上面两句是等价的。</span><br><span class="line">！[markdown](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMuZ2l0Ym9vay5jbi9hY2Q2MzYwMC1lMDYxLTExZTktOTliYy01OWQ0M2IzMGM2NDE?x-oss-process=image/format,png)  </span><br><span class="line">下面写一段代码，用指针访问数组的元素：  </span><br></pre></td></tr></table></figure>
+<p>//定义一个整形数组，并初始化<br>int nums[5] = {4, 5, 3, 2, 7};</p>
+<p>//定义一个指针变量 p，将数组 nums 的首地址赋值给 p，也可以用p = &amp;nums[0]赋值<br>int *p = nums, i;            //i 作为循环变量</p>
+<p>//p 指向数组第一个元素（数组首地址），我们可以直接用间接寻址符，获取第一个元素的内容<br>printf(“nums[0] = %d\n”, *p);            //输出结果为 nums[0] = 4</p>
+<p>//我们可以通过“p + 整数”来移动指针，要先移动地址，所以 p + 1 要扩起来<br>printf(“nums[1] = %d\n”, *(p + 1));        //输出结果为 nums[1] = 5</p>
+<p>//由上面推导出*(p + i) = nums[i]，所以我们可以通过 for 循环变量元素<br>for(i = 0; i &lt; 5; i++){<br>    printf(“nums[%d] = %d”, i, *(p + i));<br>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">注：数组名不等价于指针变量，指针变量可以进行 p++和&amp;操作，而这些操作对于数组名是非法的。数组名在编译时是确定的，在程序运行期间算一个常量。                        </span><br><span class="line"></span><br><span class="line">2. **指针数组**  </span><br><span class="line"> 指针变量和普通变量一样，也能组成数组，指针数组的具体定义如下：  </span><br><span class="line">数据类型 *数组名[指针数组长度];  </span><br><span class="line">例如：  </span><br></pre></td></tr></table></figure>
+<p>//定义一个数组<br>int nums[5] = {2, 3, 4, 5, 2}, i;<br>//定义一个指针数组<br>int *p[5];<br>//定义一个二级指针<br>int **pp;<br>//循环给指针数组赋值<br>for(i = 0; i &lt; 5; i++){<br>    p[i] = &amp;nums[i];<br>}<br>//将指针数组的首地址赋值给 pp，数组 p 的数组名作为 p 的首地址，也作为 p 中第一个元素的地址。<br>//数组存放的内容为普通变量，则数组名为变量的指针；数组存放的内容为指针，则数组名为指针的指针。<br>pp = p;<br>//利用二级指针 pp 输出数组元素<br>for(i = 0; i &lt; 5; i++){<br>//pp == &amp;p[0] == &amp;&amp;nums[0]，nums[0] == *p[0] == **pp<br>printf(“%d”, **pp);<br>//指针变量+整数的操作，即移动指针至下一个单元<br>pp++;<br>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3. **字符指针**  </span><br><span class="line">在 C 语言中本身没有提供字符串数据类型，但是可以通过字符数组和字符指针的方式存储字符串。  </span><br><span class="line">指针方式操作字符串和数组操作字符串类似，可以把定义的指针看做是字符数组的数组名。  </span><br></pre></td></tr></table></figure>
+<p>//除了定义一个字符数组外，还可以直接定义一个字符指针存储字符串<br>char *sentence = “Do not go gentle into that good night!”;</p>
+<p>//此时可以做字符串的操作<br>//输出<br>printf(“%s”, sentence);</p>
+<p>//通过下标取字符<br>printf(“%c”, sentence[0]);</p>
+<p>//获取字符串长度，其中 strlen 是 string.h 库中的方法<br>printf(“%d”, strlen(sentence));</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">注：字符指针方式区别于字符数组方式，字符数组不能通过数组名自增操作，但是字符指针是指针，可以自增操作。  </span><br></pre></td></tr></table></figure>
+<p>//定义字符数组 sentence 和 word，给 sentence 赋初值<br>char sentence[] = “Do not go gentle into that good night!”, word[100];</p>
+<p>//定义字符指针，指向 word<br>char *ch = word;<br>int i;</p>
+<p>//循环赋值<br>for(i = 0; sentence[i] != ‘\0’; i++){<br>    *(ch + i) = sentence[i];<br>}</p>
+<p>//在当 i 等于 sentence 的长度（sentence 的长度不包含’\0’）时，<br>//i 继续自增，此时判断 sentence[0] != ‘\0’不符合，跳出循环，则 i 比 sentence 长度大 1<br>*(ch + i) = ‘\0’;</p>
+<p>//输出字符串，因为 ch 指向 word，所以输出结果是一样的<br>printf(“ch = %s, word = %s”, ch, word);</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">注：指针变量必须初始化一个有效值才能使用  </span><br><span class="line">4. **多级指针**  </span><br><span class="line">指针变量作为一个变量也有自己的存储地址，而指向指针变量的存储地址就被称为指针的指针，即二级指针。依次叠加，就形成了多级指针。我们先看看二级指针，它们关系如下：</span><br><span class="line">！[markdown](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMuZ2l0Ym9vay5jbi81ZTU0YzEzMC1lMGM2LTExZTktYmUzNy0wZjJmYzUxZTFhZDU?x-oss-process=image/format,png)  </span><br><span class="line">用一段代码举个例子：</span><br></pre></td></tr></table></figure>
+<p>//定义普通变量和指针变量<br>int *pi, i = 10;<br>//定义二级指针变量<br>int **ppi;</p>
+<p>//给指针变量赋初值<br>pi = &i;</p>
+<p>//给二级指针变量赋初值<br>ppi = &pi;</p>
+<p>//我们可以直接用二级指针做普通指针的操作<br>//获取 i 的内容<br>printf(“i = %d”, **ppi);<br>//获取 i 的地址<br>printf(“i 的地址为%d”, *ppi);</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line">ps:在初始化二级指针 ppi 时，不能直接 ppi = &amp;&amp;i，因为&amp;i 获取的是一个具体的数值，而具体数字是没有指针的。  </span><br><span class="line">## 五.指针与函数 ##</span><br><span class="line">1. **函数参数为指针**  </span><br><span class="line">我们直接做一个练习，定义一个函数，用来交换两个变量的内容。  </span><br></pre></td></tr></table></figure>
+<p>void swap(int *x, int *y);<br>void main(){<br>    int x = 20, y = 10;<br>    swap(&amp;x, &amp;y);<br>    printf(“x = %d, y = %d”, x ,y);<br>}<br>void swap(int *x, int *y){<br>    int t;<br>    t = *x;<br>    *x = *y;<br>    *y = t;<br>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">如果直接传入 x，y，那么交换只在 swap 中有效，在 main 中并没有交换。  </span><br><span class="line">2. **函数返回值为指针**  </span><br><span class="line">例：  </span><br></pre></td></tr></table></figure>
+<p>int s;<br>void mian(){<br>    int *r = sum(10, 9);<br>    printf(“10 + 9 + %d”, *r);<br>}<br>int *sum(int x, int y){<br>    s = x + y;<br>    return &s;<br>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3. **指向函数的指针**  </span><br><span class="line">C 语言中，函数不能嵌套定义，也不能将函数作为参数传递。但是函数有个特性，即函数名为该函数的入口地址。我们可以定义一个指针指向该地址，将指针作为参数传递。  </span><br><span class="line">函数指针在进行“*”操作时，可以理解为执行该函数。函数指针不同与数据指针，不能进行+整数操作。  </span><br></pre></td></tr></table></figure>
+<p>/#include &lt;string.h&gt;<br>/**<br> 定义一个方法，传入两个字符串和一个函数指针 p，用 p 对两个字符串进行操作<br>*/<br>void check(char *x, char *y, int (*p)());<br>void main(){<br>    //string.h 库中的函数，使用之前需要声明该函数。字符串比较函数<br>    int strcmp();<br>    char x[] = “Zack”;<br>    char y[] = “Rudy”;</p>
+<p>//定义一个函数指针<br>    int (*p)() = strcmp;</p>
+<p>check(x, y, p);<br>}<br>void check(char *x, char *y, int (*p)()){<br>    if(!(*p)(x, y)){<br>        printf(“相等”);<br>    }else{<br>        printf(“不相等”);<br>    }<br>}</p>
+<p>```</p>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>本文中部分素材来源网络，若有不足或侵权行为请及时指正。<br>如有解释不清的地方请自行百度。<br>————————————————<br>版权声明：本文为CSDN博主「ZackSock」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/ZackSock/article/details/101594794">https://blog.csdn.net/ZackSock/article/details/101594794</a></p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/11/11/%E6%8C%87%E9%92%88/" data-id="ckvuqhqv20003tou240cua5xu" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/11/11/%E6%8C%87%E9%92%88/" data-id="ckw0qg7mf00021cu25n1a3b63" class="article-share-link">Share</a>
       
       
     </footer>
